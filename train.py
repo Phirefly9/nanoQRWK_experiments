@@ -27,7 +27,7 @@ import torch
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group
 
-from model import GPTConfig, GPT
+from qmodel import GPTConfig, GPT
 
 # -----------------------------------------------------------------------------
 # default config values designed to train a gpt2 (124M) on OpenWebText
@@ -41,8 +41,8 @@ always_save_checkpoint = True # if True, always save a checkpoint after each eva
 init_from = 'scratch' # 'scratch' or 'resume' or 'gpt2*'
 # wandb logging
 wandb_log = False # disabled by default
-wandb_project = 'owt'
-wandb_run_name = 'gpt2' # 'run' + str(time.time())
+wandb_project = 'rwkv-experiments'
+wandb_run_name = 'gpt2-qrwkv-baseline' # 'run' + str(time.time())
 # data
 dataset = 'openwebtext'
 gradient_accumulation_steps = 5 * 8 # used to simulate larger batch sizes

@@ -1,4 +1,49 @@
-# nanoRWKV (WIP)
+# nanoQWKV
+
+This is an experiment in inserting quaternion layers into RWKV, Quaternion layers ideally reduce learned parameter count to 1/4th the size of a regular model for almost no performance loss
+
+the current quaternion experiment is a new linear layer I developed that resolves some of the trade offs of traditional quaternion layers, instead of relying on 4 input channels we just use the quaternion weights to reconstruct the weights of a traditional linear layer almost as in LoRA.  This layer is 100% drop in for a linear layer other than initialization, input and output dimensions must be divisible by 4
+
+from initial observations the quaternion layer produces very similar performance while using less slightly memory as the size of a base transformer scales up.
+
+the qrwkv baselines can be run using 2 modes
+
+## the traditional nanoGPT shakespeare character modeling
+command: `python train.py config/train_shakespeare_char.py`
+
+this will run a very tiny qrwkv on character base language modeling
+
+baseline rwkv: 10.1 M parameters
+
+qrwkv: 2.7 M parameters
+
+![nanoQRWKV](assets/mini_train_loss.png)
+
+![nanoQRWKV](assets/mini_val_loss.png)
+
+##  full size gpt2-small equivalent on the same shakespeare character modeling
+command: `python train.py config/train_shakespeare_char_gpt2.py`
+
+this will run the character modeling but on the baseline gpt2 parameters equivalents 
+
+each run for 10 steps each, they are overfit by that point anyway
+
+baseline rwkv: 85M learned parameters
+qrwkv: 21 M learned parameters
+
+![nanoQRWKV](assets/train_loss.png)
+
+![nanoQRWKV](assets/val_loss.png)
+
+![nanoQRWKV](assets/mem_usage.png)
+
+I believe at the moment that as the "base network" you base the qrwkv on gets larger the difference in memory usage and throughput will increase in favor of qrwkv
+
+
+at this time I do not have the compute to run larger/longer runs
+
+
+# nanoRWKV
 
 ![nanoRWKV](assets/nanoRWKV-loss.png)
 
